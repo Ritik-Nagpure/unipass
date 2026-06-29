@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { db } from "../db/index.js";
-import { clients } from "../db/schema.js";
+import { applications } from "../db/schema.js";
 import crypto from "crypto";
 
 async function registerClient() {
@@ -12,7 +12,7 @@ async function registerClient() {
     const appName = process.argv[2] || `App-${Date.now()}`;
     const redirectUri = process.argv[3] || "http://localhost:3001/callback";
 
-    const [client] = await db.insert(clients).values({
+    const [client] = await db.insert(applications).values({
       clientId,
       clientSecret,
       name: appName,

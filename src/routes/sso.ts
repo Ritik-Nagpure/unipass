@@ -1,13 +1,14 @@
-import express, { type Request, type Response } from "express";
+import express, { Request, Response } from "express";
 import crypto from "crypto";
 import { db } from "../db/index.js";
-import { authCodes, refreshTokens, clients, users } from "../db/schema.js";
-import { eq, and, gt, isNull } from "drizzle-orm";
+import { authCodes, refreshTokens, applications, users, userAppAccess, profiles } from "../db/schema.js";
+import { eq, and, gt } from "drizzle-orm";
 import { 
   signAccessToken, 
   verifyAccessToken, 
   verifyUnipassCookie,
   signOAuthState,
+  verifyOAuthState
 } from "../utils/jwt.js";
 
 const router = express.Router();
@@ -22,8 +23,8 @@ router.get("/authorize", async (req: Request, res: Response) => {
     }
 
     // Validate client
-    const [client] = await db.select().from(clients).where(
-      eq(clients.clientId, client_id as string)
+    const [client] = await db.select().from(applications).where(
+      eq(applications.clientId, client_id as string)
     );
 
     if (!client || client.redirectUri !== redirect_uri) {
@@ -41,9 +42,22 @@ router.get("/authorize", async (req: Request, res: Response) => {
     }
 
     if (user) {
+      // Check if user has access to this app
+      const [access] = await db.select()
+        .from(userAppAccess)
+        .where(and(
+          eq(userAppAccess.userId, user.userId),
+          eq(userAppAccess.applicationId, client.id),
+          eq(userAppAccess.isActive, true)
+        ));
+
+      if (!access) {
+        console.log(`User ${user.userId} doesn't have access to app ${client.id}`);
+      }
+
       // Generate authorization code
       const code = crypto.randomBytes(20).toString("hex");
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
       await db.insert(authCodes).values({
         code,
@@ -74,10 +88,9 @@ router.get("/authorize", async (req: Request, res: Response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 10 * 60 * 1000, // 10 minutes
+        maxAge: 10 * 60 * 1000,
       });
 
-      // Redirect to login page
       return res.redirect("/login.html");
     }
   } catch (error) {
@@ -96,8 +109,8 @@ router.post("/token", async (req: Request, res: Response) => {
     }
 
     // Validate client
-    const [client] = await db.select().from(clients).where(
-      eq(clients.clientId, client_id)
+    const [client] = await db.select().from(applications).where(
+      eq(applications.clientId, client_id)
     );
 
     if (!client || client.clientSecret !== client_secret) {
@@ -121,24 +134,23 @@ router.post("/token", async (req: Request, res: Response) => {
     // Delete used code
     await db.delete(authCodes).where(eq(authCodes.code, code));
 
-    // IMPORTANT: authCode.userId is NOT NULL in schema, but TypeScript doesn't know that
-    // Use a type assertion or check
-    const userId = authCode.userId as number; // Type assertion since schema says NOT NULL
+    const userId = authCode.userId as number;
     
-    // Get user - use the asserted userId
-    const [user] = await db.select().from(users).where(
-      eq(users.id, userId)
-    );
+    // Get user and their profile
+    const [user] = await db.select().from(users).where(eq(users.id, userId));
 
     if (!user) {
       return res.status(500).json({ error: "User not found" });
     }
 
-    // Generate access token (JWT)
+    const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId));
+    const displayName = profile?.displayName || user.email.split('@')[0];
+
+    // Generate access token
     const accessPayload = {
       userId: user.id,
       email: user.email,
-      name: user.name || null,
+      name: displayName,
       clientId: client_id,
     };
     const accessToken = signAccessToken(accessPayload);
@@ -146,21 +158,35 @@ router.post("/token", async (req: Request, res: Response) => {
     // Generate refresh token
     const refreshTokenStr = crypto.randomBytes(32).toString("hex");
     const refreshExpiry = new Date();
-    refreshExpiry.setDate(refreshExpiry.getDate() + 30); // 30 days
+    refreshExpiry.setDate(refreshExpiry.getDate() + 30);
 
     await db.insert(refreshTokens).values({
       token: refreshTokenStr,
       userId: user.id,
       clientId: client_id,
+      applicationId: client.id,
       expiresAt: refreshExpiry,
       revoked: false,
     });
 
+    // Update last accessed
+    await db.update(userAppAccess)
+      .set({ lastAccessed: new Date() })
+      .where(and(
+        eq(userAppAccess.userId, user.id),
+        eq(userAppAccess.applicationId, client.id)
+      ));
+
     res.json({
       access_token: accessToken,
       token_type: "Bearer",
-      expires_in: 15 * 60, // 15 minutes
+      expires_in: 15 * 60,
       refresh_token: refreshTokenStr,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: displayName,
+      },
     });
   } catch (error) {
     console.error("Token error:", error);
@@ -173,16 +199,14 @@ router.post("/refresh", async (req: Request, res: Response) => {
   try {
     const { refresh_token, client_id, client_secret } = req.body;
 
-    // Validate client
-    const [client] = await db.select().from(clients).where(
-      eq(clients.clientId, client_id)
+    const [client] = await db.select().from(applications).where(
+      eq(applications.clientId, client_id)
     );
 
     if (!client || client.clientSecret !== client_secret) {
       return res.status(401).json({ error: "Invalid client credentials" });
     }
 
-    // Find refresh token
     const [storedToken] = await db.select().from(refreshTokens)
       .where(
         and(
@@ -197,33 +221,29 @@ router.post("/refresh", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid or expired refresh token" });
     }
 
-    // storedToken.userId is NOT NULL in schema, use type assertion
     const userId = storedToken.userId as number;
     
-    // Get user
-    const [user] = await db.select().from(users).where(
-      eq(users.id, userId)
-    );
+    const [user] = await db.select().from(users).where(eq(users.id, userId));
 
     if (!user) {
       return res.status(500).json({ error: "User not found" });
     }
 
-    // Revoke old refresh token (rotation)
+    const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId));
+    const displayName = profile?.displayName || user.email.split('@')[0];
+
     await db.update(refreshTokens)
       .set({ revoked: true })
       .where(eq(refreshTokens.id, storedToken.id));
 
-    // Issue new access token
     const accessPayload = {
       userId: user.id,
       email: user.email,
-      name: user.name || null,
+      name: displayName,
       clientId: client_id,
     };
     const newAccessToken = signAccessToken(accessPayload);
 
-    // Issue new refresh token
     const newRefreshToken = crypto.randomBytes(32).toString("hex");
     const newExpiry = new Date();
     newExpiry.setDate(newExpiry.getDate() + 30);
@@ -232,6 +252,7 @@ router.post("/refresh", async (req: Request, res: Response) => {
       token: newRefreshToken,
       userId: user.id,
       clientId: client_id,
+      applicationId: client.id,
       expiresAt: newExpiry,
       revoked: false,
     });
@@ -262,18 +283,25 @@ router.get("/userinfo", async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Invalid or expired access token" });
     }
 
-    const [user] = await db.select().from(users).where(
-      eq(users.id, payload.userId)
-    );
+    const [user] = await db.select().from(users).where(eq(users.id, payload.userId));
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    const [profile] = await db.select().from(profiles).where(eq(profiles.userId, user.id));
+
     res.json({
       id: user.id,
       email: user.email,
-      name: user.name,
+      name: profile?.displayName || user.email.split('@')[0],
+      avatar: profile?.avatar || null,
+      phone: profile?.phone || null,
+      bio: profile?.bio || null,
+      website: profile?.website || null,
+      location: profile?.location || null,
+      company: profile?.company || null,
+      title: profile?.title || null,
     });
   } catch (error) {
     console.error("Userinfo error:", error);

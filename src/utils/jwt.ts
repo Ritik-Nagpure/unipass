@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import {type  SignOptions } from "jsonwebtoken";
+import { SignOptions } from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -13,12 +13,12 @@ export interface UnipassTokenPayload {
 export interface OAuthStatePayload {
   client_id: string;
   redirect_uri: string;
-  state?: string | undefined; // Explicitly allow undefined
+  state?: string;
 }
 
 export const signUnipassCookie = (payload: UnipassTokenPayload): string => {
   const signOptions: SignOptions = {
-    expiresIn: "30d" as const
+    expiresIn: "30d"
   };
   
   return jwt.sign(
@@ -49,7 +49,7 @@ export const verifyUnipassCookie = (token: string): UnipassTokenPayload | null =
 
 export const signAccessToken = (payload: UnipassTokenPayload): string => {
   const signOptions: SignOptions = {
-    expiresIn: "15m" as const
+    expiresIn: "15m"
   };
   
   return jwt.sign(
@@ -80,7 +80,7 @@ export const verifyAccessToken = (token: string): UnipassTokenPayload | null => 
 
 export const signOAuthState = (payload: OAuthStatePayload): string => {
   const signOptions: SignOptions = {
-    expiresIn: "10m" as const
+    expiresIn: "10m"
   };
   
   const tokenPayload: any = {
@@ -88,8 +88,7 @@ export const signOAuthState = (payload: OAuthStatePayload): string => {
     redirect_uri: payload.redirect_uri,
   };
   
-  // Only add state if it exists and is not undefined
-  if (payload.state !== undefined && payload.state !== null) {
+  if (payload.state) {
     tokenPayload.state = payload.state;
   }
   
