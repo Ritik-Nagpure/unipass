@@ -1,2 +1,0 @@
-DROP TABLE "sessions" CASCADE;--> statement-breakpoint
-ALTER TABLE "clients" ADD COLUMN "created_at" timestamp DEFAULT now();
