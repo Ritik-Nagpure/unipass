@@ -1,9 +1,8 @@
 {
   "name": "@unipass/source",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "prebuild": "npm run lint",
     "dev": "nx run-many -t serve --projects=gui,api --parallel",
     "build:all": "nx run-many -t build --projects=gui,api --parallel",
     "test": "nx run-many -t test --projects=gui,api --parallel",
