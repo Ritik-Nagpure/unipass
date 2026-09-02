@@ -1,8 +1,9 @@
+import Layout from "./app/layout"
 
 const app = () => {
   return (
     <div>
-        APP
+      <Layout />
     </div>
   )
 }

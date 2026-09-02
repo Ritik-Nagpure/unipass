@@ -7,15 +7,12 @@
     "build:all": "nx run-many -t build --projects=gui,api --parallel",
     "test": "nx run-many -t test --projects=gui,api --parallel",
     "lint": "nx run-many -t lint --projects=gui,api --parallel",
-
     "build:gui": "nx build gui",
     "copy:gui": "node scripts/copy-gui.js",
     "build:api": "nx build api",
     "build": "npm run build:gui && npm run copy:gui && npm run build:api",
-
     "dev:ui": "nx serve gui",
     "dev:api": "nx serve api"
-    
   },
   "private": true,
   "devDependencies": {
@@ -81,6 +78,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-query": "^5.102.8",
+    "@tanstack/react-query-devtools": "^5.102.8",
     "@tanstack/react-router": "^1.170.32",
     "@types/cors": "^2.8.19",
     "axios": "^1.6.0",

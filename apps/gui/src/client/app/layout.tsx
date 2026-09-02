@@ -1,14 +1,11 @@
-import React, { ReactNode } from 'react';
-import Header from './header';
-import Sidebar from './sidebar';
-import Bottombar from './bottombar';
-import Footer from './footer';
+import React from 'react';
+import Header from './pages/layout/header';
+import Sidebar from './pages/layout/sidebar';
+import Bottombar from './pages/layout/bottombar';
+import Footer from './pages/layout/footer';
+import Display from './pages/layout/display';
 
-interface LayoutProps {
-  children?: ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -20,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         <main className="flex-1 lg:ml-64 flex items-center justify-center">
           <div className="w-full max-w-7xl px-4 md:px-6 py-4 md:py-6">
-            {children}
+            <Display></Display>
           </div>
         </main>
       </div>
