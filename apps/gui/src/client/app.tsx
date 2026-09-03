@@ -1,11 +1,9 @@
-import Layout from "./app/layout"
+import React from 'react';
+import { RouterProvider } from '@tanstack/react-router';
+import { router } from './app/router';
 
-const app = () => {
-  return (
-    <div>
-      <Layout />
-    </div>
-  )
-}
+const App: React.FC = () => {
+  return <RouterProvider router={router} />;
+};
 
-export default app
+export default App;
