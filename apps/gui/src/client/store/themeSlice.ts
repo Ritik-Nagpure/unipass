@@ -1,16 +1,20 @@
+// src/store/themeSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type Theme = 'light' | 'dark';
-
 interface ThemeState {
-  mode: Theme;
+  mode: 'light' | 'dark';
 }
 
-const getInitialTheme = (): Theme => {
-  if (typeof window !== 'undefined') {
-    const stored = localStorage.getItem('theme') as Theme;
-    if (stored) return stored;
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+// Get initial theme from localStorage or system preference
+const getInitialTheme = (): 'light' | 'dark' => {
+  // Check localStorage first
+  const stored = localStorage.getItem('theme');
+  if (stored === 'light' || stored === 'dark') {
+    return stored;
+  }
+  // Check system preference
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
   }
   return 'light';
 };
@@ -25,20 +29,23 @@ const themeSlice = createSlice({
   reducers: {
     toggleTheme: (state) => {
       state.mode = state.mode === 'light' ? 'dark' : 'light';
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('theme', state.mode);
-        document.documentElement.classList.toggle('dark', state.mode === 'dark');
-      }
+      // Apply theme immediately
+      applyTheme(state.mode);
     },
-    setTheme: (state, action: PayloadAction<Theme>) => {
+    setTheme: (state, action: PayloadAction<'light' | 'dark'>) => {
       state.mode = action.payload;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('theme', action.payload);
-        document.documentElement.classList.toggle('dark', action.payload === 'dark');
-      }
+      applyTheme(state.mode);
     },
   },
 });
+
+// Helper function to apply theme
+const applyTheme = (theme: 'light' | 'dark') => {
+  // Set data attribute on html element
+  document.documentElement.setAttribute('data-theme', theme);
+  // Store in localStorage
+  localStorage.setItem('theme', theme);
+};
 
 export const { toggleTheme, setTheme } = themeSlice.actions;
 export default themeSlice.reducer;
