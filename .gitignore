@@ -4,6 +4,7 @@
 dist
 tmp
 out-tsc
+apps/api/src/assets
 
 # dependencies
 node_modules
@@ -50,4 +51,9 @@ vitest.config.*.timestamp*
 #env files
 .env
 .env.dev
-.env.example
+.env.local
+.env.*.local
+
+# Test artifacts
+*.log
+api-test-*.log

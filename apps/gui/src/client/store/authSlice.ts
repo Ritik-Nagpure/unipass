@@ -1,15 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getAuthCookie, clearAuthCookie, setAuthCookie } from '../shared/lib/cookies';
 
-interface User {
+export interface User {
   id: string;
-  name: string;
   email: string;
-  role: 'user' | 'admin' | 'moderator';
+  name: string;
+  role: string;
+  avatarUrl?: string | null;
+  emailVerifiedAt?: string | null;
+  lastLoginAt?: string | null;
+  createdAt?: string;
 }
 
 interface AuthState {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -17,8 +21,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
-  isAuthenticated: typeof window !== 'undefined' ? !!localStorage.getItem('token') : false,
+  isAuthenticated: typeof window !== 'undefined' ? !!getAuthCookie() : false,
   isLoading: false,
   error: null,
 };
@@ -38,14 +41,15 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
-    loginSuccess: (state, action: PayloadAction<{ user: User; token: string }>) => {
+    loginSuccess: (state, action: PayloadAction<{ user: User }>) => {
       state.user = action.payload.user;
-      state.token = action.payload.token;
       state.isAuthenticated = true;
       state.isLoading = false;
       state.error = null;
       if (typeof window !== 'undefined') {
-        localStorage.setItem('token', action.payload.token);
+        // The backend session cookies are httpOnly (invisible to JS), so we
+        // keep a lightweight client-side marker to know a session exists.
+        setAuthCookie(action.payload.user.id || 'session', 30);
       }
     },
     loginFailure: (state, action: PayloadAction<string>) => {
@@ -55,12 +59,11 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
-      state.token = null;
       state.isAuthenticated = false;
       state.isLoading = false;
       state.error = null;
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
+        clearAuthCookie();
       }
     },
     updateUser: (state, action: PayloadAction<Partial<User>>) => {

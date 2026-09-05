@@ -1,10 +1,10 @@
 // src/components/Header.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from '@tanstack/react-router';
-import { useAppSelector, useAppDispatch } from '../store/store';
-import { toggleTheme } from '../store/themeSlice';
+import { useAppSelector, useAppDispatch } from '../../../../store/store';
+import { toggleTheme } from '../../../../store/themeSlice';
 import { FaSun, FaMoon } from 'react-icons/fa';
-import logo from '../assets/Logo.png';
+import logo from '../../../../../assets/Logo.png';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();

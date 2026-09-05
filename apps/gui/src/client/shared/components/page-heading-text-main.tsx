@@ -12,7 +12,7 @@ interface PageHeadingMainProps {
 export const PageHeadingMain: React.FC<PageHeadingMainProps> = ({
   text,
   size = '2xl',
-  color = 'text-gray-900 dark:text-white',
+  color = 'text-text-primary',
   style = 'normal',
   className = '',
   as: Tag = 'h1',

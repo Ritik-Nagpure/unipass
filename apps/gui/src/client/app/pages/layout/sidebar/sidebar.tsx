@@ -1,5 +1,8 @@
 import React from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useAppDispatch } from '../../../../store/store';
+import { logout as logoutAction } from '../../../../store/authSlice';
+import { authApi } from '../../../../shared/services/auth';
 
 interface SidebarItem {
   to: string;
@@ -57,26 +60,54 @@ const sidebarItems: SidebarItem[] = [
 ];
 
 const Sidebar: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // Ignore network errors - clear the local session regardless
+    }
+    dispatch(logoutAction());
+    navigate({ to: '/' });
+  };
+
   return (
-    <nav className="p-4 space-y-1">
-      {sidebarItems.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          activeProps={{
-            className:
-              'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
-          }}
-          inactiveProps={{
-            className:
-              'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
-          }}
-          className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200"
-        >
-          {item.icon}
-          <span>{item.label}</span>
-        </Link>
-      ))}
+    <nav className="p-4 space-y-1 flex flex-col h-full" aria-label="Main navigation">
+      <div className="space-y-1">
+        {sidebarItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            activeProps={{
+              className:
+                'bg-primary-light/40 text-primary-dark',
+            }}
+            inactiveProps={{
+              className:
+                'text-text-secondary hover:bg-bg-secondary hover:text-primary-dark',
+            }}
+            className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200"
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="mt-auto flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:bg-error/10 hover:text-error transition-all duration-200 w-full text-left"
+        aria-label="Sign out"
+        data-testid="sidebar-logout"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span>Sign Out</span>
+      </button>
     </nav>
   );
 };

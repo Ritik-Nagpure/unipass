@@ -49,16 +49,16 @@ const bottomBarItems: BottomBarItem[] = [
 
 const Bottombar: React.FC = () => {
   return (
-    <nav className="flex justify-around items-center h-16 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+    <nav className="flex justify-around items-center h-16 bg-bg-secondary border-t border-border-light">
       {bottomBarItems.map((item) => (
         <Link
           key={item.to}
           to={item.to}
           activeProps={{
-            className: 'text-blue-600 dark:text-blue-400',
+            className: 'text-primary-dark',
           }}
           inactiveProps={{
-            className: 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
+            className: 'text-text-secondary hover:text-primary-dark',
           }}
           className="flex flex-col items-center justify-center px-3 py-1 rounded-lg transition-all duration-200"
         >

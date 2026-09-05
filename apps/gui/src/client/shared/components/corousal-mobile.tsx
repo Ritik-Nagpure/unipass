@@ -4,7 +4,6 @@ interface CarouselMobileProps {
     items: React.ReactNode[];
     autoPlay?: boolean;
     interval?: number;
-    showArrows?: boolean;
     showDots?: boolean;
     className?: string;
 }
@@ -13,7 +12,6 @@ export const CarouselMobile: React.FC<CarouselMobileProps> = ({
     items,
     autoPlay = true,
     interval = 5000,
-    showArrows = true,
     showDots = true,
     className = '',
 }) => {

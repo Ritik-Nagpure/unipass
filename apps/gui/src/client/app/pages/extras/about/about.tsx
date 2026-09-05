@@ -1,13 +1,13 @@
 // About.jsx
 import React from 'react';
-import logo from '../../../../assets/Logo.png';
+import logo from '../../../../../assets/Logo.png';
 
 const About = () => {
   // Handle image error with proper typing
   const handleImageError = (e : React.SyntheticEvent<HTMLImageElement, Event>) => {
     const target = e.target;
     if (target instanceof HTMLImageElement) {
-      target.src = 'https://via.placeholder.com/120x120/3b82f6/ffffff?text=UNIPASS';
+      target.src = 'https://via.placeholder.com/120x120/26788e/ebefee?text=UNIPASS';
     }
   };
 
@@ -80,7 +80,9 @@ const About = () => {
                 <span className="block text-sm text-text-tertiary mt-1">Uptime</span>
               </div>
               <div className="text-center p-2">
-                <span className="block text-3xl md:text-4xl font-bold text-primary">4.8⭐</span>
+                <span className="block text-3xl md:text-4xl font-bold text-primary">
+                  4.8<span role="img" aria-label="star rating">⭐</span>
+                </span>
                 <span className="block text-sm text-text-tertiary mt-1">User Rating</span>
               </div>
             </div>

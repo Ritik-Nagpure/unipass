@@ -17,7 +17,7 @@ export const CardWeb: React.FC<CardWebProps> = ({
 }) => {
   return (
     <div
-      className={`hidden md:block bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${hoverable ? 'hover:scale-[1.02]' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`hidden md:block bg-card-bg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${hoverable ? 'hover:scale-[1.02]' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}
       onClick={onClick}
       onKeyDown={(e) => onClick && (e.key === 'Enter' || e.key === ' ') && onClick()}
       role={onClick ? 'button' : 'article'}
@@ -25,8 +25,8 @@ export const CardWeb: React.FC<CardWebProps> = ({
       aria-label={title}
     >
       {title && (
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
+        <div className="px-6 py-4 border-b border-border-light">
+          <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
         </div>
       )}
       <div className="p-6">{children}</div>

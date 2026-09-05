@@ -10,6 +10,7 @@ export default [
       '**/out-tsc',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
+      '**/src/assets/**',
     ],
   },
   {
@@ -19,7 +20,10 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+          allow: [
+            '^@(?:client|app|pages|layout|shared|store|assets)/',
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$',
+          ],
           depConstraints: [
             {
               sourceTag: '*',

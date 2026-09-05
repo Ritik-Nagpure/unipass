@@ -1,6 +1,6 @@
 // src/components/ThemeInitializer.tsx
 import { useEffect } from 'react';
-import { useAppSelector } from '../store/store';
+import { useAppSelector } from '@store/store';
 
 export const ThemeInitializer: React.FC = () => {
   const theme = useAppSelector((state) => state.theme.mode);

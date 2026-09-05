@@ -3,8 +3,27 @@ import { Link } from '@tanstack/react-router';
 import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import logo from '../../../../../assets/Logo.png';
 
-// Define valid routes
-type ValidRoute = '/' | '/dashboard' | '/profile' | '/settings' | '/about';
+export type ValidRoute = 
+  | '/' 
+  | '/dashboard' 
+  | '/profile' 
+  | '/settings' 
+  | '/about' 
+  | '/features'
+  | '/pricing'
+  | '/docs'
+  | '/documentation'
+  | '/changelog'
+  | '/blog'
+  | '/careers'
+  | '/contact'
+  | '/community'
+  | '/help'
+  | '/help-center'
+  | '/privacy'
+  | '/privacy-policy'
+  | '/terms'
+  | '/terms-of-service';
 
 // Define link types
 interface FooterLink {
@@ -28,28 +47,28 @@ const footerSections: FooterSection[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Features', to: '/' },
-      { label: 'Pricing', to: '/' },
-      { label: 'Documentation', to: '/' },
-      { label: 'Changelog', to: '/' },
+      { label: 'Features', to: '/features' },
+      { label: 'Pricing', to: '/pricing' },
+      { label: 'Documentation', to: '/documentation' },
+      { label: 'Changelog', to: '/changelog' },
     ],
   },
   {
     title: 'Company',
     links: [
       { label: 'About', to: '/about' },
-      { label: 'Blog', to: '/' },
-      { label: 'Careers', to: '/' },
-      { label: 'Contact', to: '/' },
+      { label: 'Blog', to: '/blog' },
+      { label: 'Careers', to: '/careers' },
+      { label: 'Contact', to: '/contact' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { label: 'Community', to: '/' },
-      { label: 'Help Center', to: '/' },
-      { label: 'Privacy Policy', to: '/' },
-      { label: 'Terms of Service', to: '/' },
+      { label: 'Community', to: '/community' },
+      { label: 'Help Center', to: '/help-center' },
+      { label: 'Privacy Policy', to: '/privacy-policy' },
+      { label: 'Terms of Service', to: '/terms-of-service' },
     ],
   },
 ];
@@ -128,7 +147,7 @@ const Footer: React.FC = () => {
                 {section.links.map((link) => (
                   <li key={link.to}>
                     <Link
-                      to={link.to}
+                      to={link.to as string}
                       className="text-text-secondary hover:text-primary text-sm transition-colors duration-200"
                     >
                       {link.label}
