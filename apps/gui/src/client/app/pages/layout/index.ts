@@ -1,5 +1,0 @@
-export { default as Header } from './header'
-export { default as Sidebar } from './sidebar'
-export { default as Display } from './display'
-export { default as Bottombar } from './bottombar'
-export { default as Footer } from './footer'

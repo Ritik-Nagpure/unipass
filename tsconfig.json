@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/unipass-e2e"
+    },
+    {
+      "path": "./apps/unipass"
+    },
+    {
+      "path": "./apps/unipass-api-e2e"
+    },
+    {
+      "path": "./apps/unipass-api"
+    }
+  ]
+}

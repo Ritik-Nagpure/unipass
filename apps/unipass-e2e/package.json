@@ -1,0 +1,10 @@
+{
+  "name": "@unipass/unipass-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@unipass/unipass"
+    ]
+  }
+}
