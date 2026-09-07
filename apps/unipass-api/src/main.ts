@@ -7,6 +7,10 @@ const app = express();
 
 app.get('/', (req, res) => {
   res.send({ message: 'Hello API' });
+
+});
+app.get('/check', (req, res) => {
+  res.status(200).send({ msg : 'unipass api is up and running correct. integrate to make ui work' });
 });
 
 app.listen(port, host, () => {
