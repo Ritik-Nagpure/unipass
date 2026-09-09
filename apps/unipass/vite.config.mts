@@ -1,4 +1,5 @@
 /// <reference types='vitest' />
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -6,14 +7,20 @@ export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/apps/unipass',
   server: {
-    port: 4200,
+    port: 3000,
     host: 'localhost',
   },
   preview: {
-    port: 4300,
+    port: 3001,
     host: 'localhost',
   },
-  plugins: [react()],
+  plugins: [
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+    }),
+    react()
+  ],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [],
