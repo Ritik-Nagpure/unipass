@@ -2,6 +2,7 @@
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -19,7 +20,8 @@ export default defineConfig(() => ({
       target: 'react',
       autoCodeSplitting: true,
     }),
-    react()
+    react(),
+    tailwindcss()
   ],
   // Uncomment this if you are using workers.
   // worker: {
