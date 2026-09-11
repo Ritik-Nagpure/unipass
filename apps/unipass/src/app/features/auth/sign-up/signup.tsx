@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { LuEye, LuEyeOff } from 'react-icons/lu';
 
@@ -76,7 +77,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
           </div>
           <label htmlFor="terms" className="text-sm text-gray-300 cursor-pointer">
             I agree to the{' '}
-            <a href="#" className="underline text-gray-300 hover:text-white">Terms & Conditions</a>
+            <Link
+              to="/terms-of-use"
+              className="underline text-gray-300 hover:text-white"
+            >
+              Terms & Conditions
+            </Link>
           </label>
         </div>
 

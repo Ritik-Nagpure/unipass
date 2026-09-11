@@ -1,8 +1,8 @@
-
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { useState } from 'react'
 import { Layout } from '../app/features/layout'
+import { useAppSelector } from '../app/shared/hooks/store/store'
+
 
 const LoggedInApp = () => (
   <div>
@@ -13,16 +13,16 @@ const LoggedInApp = () => (
 )
 
 const LoggedOutApp = () => (
-  <div>
+  <div className='w-full h-full flex flex-row justify-center items-center p-0'>
     <Outlet />
   </div>
 )
 
 function MainApp() {
-  const [isLogin, setIsLogin] = useState(false)
+  const isLogin = useAppSelector((state) => state.auth.isLogin)
   const isDev = true
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-screen p-0'>
       {isLogin ? <LoggedInApp /> : <LoggedOutApp />}
       {isDev && <TanStackRouterDevtools />}
     </div>

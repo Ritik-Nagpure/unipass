@@ -3,9 +3,10 @@ import { LuEye, LuEyeOff } from 'react-icons/lu';
 
 interface LoginFormProps {
   onSwitchToSignUp: () => void;
+  onForgotPassword: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp, onForgotPassword }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -42,11 +43,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
           </button>
         </div>
 
-        {/* Forgot Password */}
+        {/* Forgot password link */}
         <div className="flex justify-end">
-          <a href="#" className="text-sm text-gray-400 hover:text-white underline transition-colors">
+          <button
+            type="button"
+            onClick={onForgotPassword}
+            className="text-sm text-gray-400 hover:text-white underline transition-colors"
+          >
             Forgot password?
-          </a>
+          </button>
         </div>
 
         {/* Submit Button */}
@@ -88,3 +93,4 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
 };
 
 export default LoginForm
+
