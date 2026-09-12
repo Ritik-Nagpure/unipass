@@ -9,6 +9,8 @@ import {
   LuBell,
   LuCalendar,
   LuFolder,
+  LuLayoutDashboard,
+  LuBookLock,
   LuZap,
   LuPlus,
   LuSettings,
@@ -25,9 +27,9 @@ interface NavItem {
 
 const mainNav: NavItem[] = [
   { to: '/home', label: 'Home', icon: LuHouse },
-  { to: '/details', label: 'Details', icon: LuAppWindow, badge: 1 },
-  { to: '/dashboard', label: 'Inbox', icon: LuInbox, badge: 2 },
-  { to: '/Multi Factor Auth', label: 'Activity', icon: LuBell },
+  { to: '/details', label: 'Details', icon: LuAppWindow, },
+  { to: '/dashboard', label: 'Dashboard', icon: LuLayoutDashboard, },
+  { to: '/multi-factor-auth', label: 'Multi Factor Auth', icon: LuBookLock },
   // { to: '/schedule', label: 'Schedule', icon: LuCalendar, badge: 4 },
 ]
 
@@ -94,26 +96,30 @@ const ProjectsSection = (collapsed: boolean) => {
 }
 
 const BottomSection = ({ collapsed, currentPath }: BottomSectionProps) => {
+  const fullName = 'Sandra Marx'
+  const email = 'sandra@gmail.com'
   return (
     <div className="border-t border-gray-800 py-3">
       <NavGroup items={bottomNav} collapsed={collapsed} currentPath={currentPath} />
 
       {/* User card */}
       <div className={`mt-2 px-3`}>
-        <button
-          className={`flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-[#2D2D3A] transition-colors ${collapsed ? 'justify-center' : ''
-            }`}
-        >
-          <div className="w-8 h-8 rounded-full bg-[#7C5CFC] flex items-center justify-center text-white text-sm font-medium shrink-0">
-            S
-          </div>
-          {!collapsed && (
-            <div className="flex-1 text-left min-w-0">
-              <p className="text-sm text-white truncate">Sandra Marx</p>
-              <p className="text-xs text-gray-500 truncate">sandra@gmail.com</p>
+        <Link to='/profile'>
+          <button
+            className={`flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-[#2D2D3A] transition-colors ${collapsed ? 'justify-center' : ''
+              }`}
+          >
+            <div className="w-8 h-8 rounded-full bg-[#7C5CFC] flex items-center justify-center text-white text-sm font-medium shrink-0">
+              {fullName[0].toUpperCase()}
             </div>
-          )}
-        </button>
+            {!collapsed && (
+              <div className="flex-1 text-left min-w-0">
+                <p className="text-sm text-white truncate">{fullName}</p>
+                <p className="text-xs text-gray-500 truncate">{email}</p>
+              </div>
+            )}
+          </button>
+        </Link>
       </div>
     </div>
   )
@@ -131,7 +137,7 @@ const Sidebar = ({ onCollapseChange }: SidebarProps) => {
   }
 
   return (
-    <aside  className={`hidden flex-1 lg:flex flex-col bg-[#232330] border-r border-gray-800 transition-[width] duration-300 ease-in-out ${collapsed ? 'w-20' : 'w-64'}`} >
+    <aside className={`hidden flex-1 lg:flex flex-col bg-[#232330] border-r border-gray-800 transition-[width] duration-300 ease-in-out ${collapsed ? 'w-20' : 'w-64'}`} >
 
       {/* TOP — brand + toggle */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
@@ -140,7 +146,7 @@ const Sidebar = ({ onCollapseChange }: SidebarProps) => {
             Unipass
           </span>
         )}
-        <button  onClick={toggle} className="text-gray-400 hover:text-white transition-colors p-1"
+        <button onClick={toggle} className="text-gray-400 hover:text-white transition-colors p-1"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'} >
           {collapsed ? <LuChevronsRight size={18} /> : <LuChevronsLeft size={18} />}
         </button>

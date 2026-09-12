@@ -12,6 +12,7 @@ import { privacyRoute } from './routes/info-pages/privacy'
 import { aboutRoute } from './routes/info-pages/about'
 import { contactRoute } from './routes/info-pages/contact'
 import { helpRoute } from './routes/help'
+import { mfaRoute } from './routes/mfa'
 
 const routeTree = rootRoute.addChildren([
     authRoute,
@@ -27,6 +28,7 @@ const routeTree = rootRoute.addChildren([
         detailsRoute,
         settingsRoute,
         profileRoute,
+        mfaRoute
     ]),
 ])
 
