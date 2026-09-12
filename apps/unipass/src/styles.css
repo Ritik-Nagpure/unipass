@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+/* src/styles.css */
+
+/* Hide scrollbar for Chrome, Safari, Edge */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.no-scrollbar {
+  scrollbar-width: none;
+
+  /* Hide scrollbar for IE / old Edge */
+  -ms-overflow-style: none;
+}
+
+/* Optional: Hide the page-level scrollbar too */
+html,
+body {
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}

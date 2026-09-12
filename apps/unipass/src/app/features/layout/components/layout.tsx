@@ -7,20 +7,28 @@ import Sidebar from './sidebar'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="h-screen w-screen flex flex-col bg-[#1A1A24] overflow-hidden">
+
       <Header />
-      <div className="flex flex-1">
-        <div className="hidden md:block">
+
+      <div className="flex-1 flex overflow-hidden min-h-0">
+
+        <div className="hidden lg:flex h-full">
           <Sidebar />
         </div>
-        <main className="flex-1 p-4">{children}</main>
+
+        <main className="flex-1 overflow-y-auto no-scrollbar flex flex-col min-h-0 gap-0">
+          <div className="flex-1">
+            {children}
+          </div>
+
+          <div className='py-2 my-2'>
+            <Footer />
+          </div>
+        </main>
       </div>
-      <div className="hidden md:block">
-        <Footer />
-      </div>
-      <div className="block md:hidden">
-        <Bottombar />
-      </div>
+
+      <Bottombar />
     </div>
   )
 }

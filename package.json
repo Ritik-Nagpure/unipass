@@ -21,6 +21,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
+    "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query": "^5.102.8",
     "@tanstack/react-router": "^1.170.32",
     "@tanstack/react-table": "^9.2.4",
@@ -35,6 +36,7 @@
     "jsonwebtoken": "^9.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.7.0",
     "react-redux": "^9.3.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
