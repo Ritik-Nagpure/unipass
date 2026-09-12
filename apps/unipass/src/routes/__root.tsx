@@ -20,7 +20,7 @@ const LoggedOutApp = () => (
 
 function MainApp() {
   const isLogin = useAppSelector((state) => state.auth.isLogin)
-  const isDev = true
+  const isDev = false
   return (
     <div className='w-screen h-screen p-0'>
       {isLogin ? <LoggedInApp /> : <LoggedOutApp />}
