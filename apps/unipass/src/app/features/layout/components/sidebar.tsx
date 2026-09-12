@@ -13,6 +13,7 @@ import {
   LuPlus,
   LuSettings,
   LuCircleHelp,
+  LuAppWindow
 } from 'react-icons/lu'
 
 interface NavItem {
@@ -24,10 +25,10 @@ interface NavItem {
 
 const mainNav: NavItem[] = [
   { to: '/home', label: 'Home', icon: LuHouse },
-  { to: '/search', label: 'Search', icon: LuSearch, badge: 1 },
+  { to: '/details', label: 'Details', icon: LuAppWindow, badge: 1 },
   { to: '/dashboard', label: 'Inbox', icon: LuInbox, badge: 2 },
-  { to: '/activity', label: 'Activity', icon: LuBell },
-  { to: '/schedule', label: 'Schedule', icon: LuCalendar, badge: 4 },
+  { to: '/Multi Factor Auth', label: 'Activity', icon: LuBell },
+  // { to: '/schedule', label: 'Schedule', icon: LuCalendar, badge: 4 },
 ]
 
 const sharedNav: NavItem[] = [
@@ -42,6 +43,11 @@ const bottomNav: NavItem[] = [
 
 interface SidebarProps {
   onCollapseChange?: (collapsed: boolean) => void
+}
+
+interface BottomSectionProps {
+  collapsed: boolean
+  currentPath: string
 }
 
 const ProjectsSection = (collapsed: boolean) => {
@@ -87,7 +93,7 @@ const ProjectsSection = (collapsed: boolean) => {
   )
 }
 
-const BottomSection = (collapsed: boolean, currentPath: string) => {
+const BottomSection = ({ collapsed, currentPath }: BottomSectionProps) => {
   return (
     <div className="border-t border-gray-800 py-3">
       <NavGroup items={bottomNav} collapsed={collapsed} currentPath={currentPath} />
@@ -114,7 +120,7 @@ const BottomSection = (collapsed: boolean, currentPath: string) => {
 }
 
 const Sidebar = ({ onCollapseChange }: SidebarProps) => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const { location } = useRouterState()
   const currentPath = location.pathname
 
@@ -125,23 +131,17 @@ const Sidebar = ({ onCollapseChange }: SidebarProps) => {
   }
 
   return (
-    <aside
-      className={`hidden lg:flex flex-col bg-[#232330] border-r border-gray-800 transition-[width] duration-300 ease-in-out ${collapsed ? 'w-20' : 'w-64'
-        }`}
-    >
+    <aside  className={`hidden flex-1 lg:flex flex-col bg-[#232330] border-r border-gray-800 transition-[width] duration-300 ease-in-out ${collapsed ? 'w-20' : 'w-64'}`} >
 
       {/* TOP — brand + toggle */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
         {!collapsed && (
           <span className="text-white font-semibold text-lg tracking-wide">
-            unipass
+            Unipass
           </span>
         )}
-        <button
-          onClick={toggle}
-          className="text-gray-400 hover:text-white transition-colors p-1"
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
+        <button  onClick={toggle} className="text-gray-400 hover:text-white transition-colors p-1"
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'} >
           {collapsed ? <LuChevronsRight size={18} /> : <LuChevronsLeft size={18} />}
         </button>
       </div>
@@ -150,7 +150,7 @@ const Sidebar = ({ onCollapseChange }: SidebarProps) => {
       <nav className="flex-1 overflow-y-auto no-scrollbar py-4">
 
         {/* Search (only when expanded) */}
-        {!collapsed && (
+        {/* {!collapsed && (
           <div className="px-3 mb-4">
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2D2D3A] border border-gray-700">
               <LuSearch size={16} className="text-gray-500" />
@@ -164,32 +164,31 @@ const Sidebar = ({ onCollapseChange }: SidebarProps) => {
               </span>
             </div>
           </div>
-        )}
+        )} */}
 
         <NavGroup items={mainNav} collapsed={collapsed} currentPath={currentPath} />
 
         <div className="my-4 mx-3 border-t border-gray-800" />
 
-        <NavGroup
+        {/* <NavGroup
           items={sharedNav}
           collapsed={collapsed}
           currentPath={currentPath}
           sectionLabel="Shared"
-        />
+        /> */}
 
         <div className="my-4 mx-3 border-t border-gray-800" />
 
         {/* <ProjectsSection collapsed={collapsed} /> */}
 
       </nav>
-      {/* <BottomSection collapsed={collapsed} currentPath={currentPath} /> */}
+      <BottomSection collapsed={collapsed} currentPath={currentPath} />
     </aside>
   )
 }
 
 export default Sidebar
 
-/* ---------- helper sub-component ---------- */
 
 interface NavGroupProps {
   items: NavItem[]

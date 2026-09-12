@@ -15,7 +15,7 @@ const ContactPage = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-[#1A1A24] overflow-hidden">
+    <div className="h-screen w-screen bg-[#1A1A24] ">
       <div className="w-full h-full max-w-350 max-h-255 mx-auto my-auto flex flex-col bg-[#232330] rounded-2xl shadow-2xl m-4 sm:m-8">
 
         {/* Header */}
@@ -31,7 +31,7 @@ const ContactPage = () => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto no-scrollbar px-6 sm:px-10 py-8">
+        <div className="flex-1 px-6 sm:px-10 py-8">
           <div className="max-w-3xl mx-auto grid md:grid-cols-2 gap-10">
 
             {/* Left — Info */}

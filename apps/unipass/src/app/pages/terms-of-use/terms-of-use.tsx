@@ -5,7 +5,7 @@ const TermsPage = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="w-full h-full bg-[#1A1A24] overflow-hidden pb-10">
+    <div className="w-full h-full bg-[#1A1A24] pb-10">
       <div className="h-full flex flex-col bg-[#232330] rounded-2xl shadow-2xl sm:m-8">
 
         {/* Header with back button */}
@@ -21,7 +21,7 @@ const TermsPage = () => {
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-scroll no-scrollbar px-6 sm:px-10 py-8">
+        <div className="flex-1 px-6 sm:px-10 py-8">
           <div className="max-w-3xl mx-auto text-gray-300 space-y-6 leading-relaxed">
             <section>
               <h2 className="text-lg font-semibold text-white mb-2">1. Acceptance of Terms</h2>

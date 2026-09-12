@@ -5,7 +5,7 @@ import { useAppSelector } from '../app/shared/hooks/store/store'
 
 
 const LoggedInApp = () => (
-  <div>
+  <div className=''>
     <Layout>
       <Outlet />
     </Layout>
@@ -22,7 +22,7 @@ function MainApp() {
   const isLogin = useAppSelector((state) => state.auth.isLogin)
   const isDev = false
   return (
-    <div className='w-screen h-screen p-0'>
+    <div className='w-screen h-screen p-0 overflow-y-auto no-scrollbar'>
       {isLogin ? <LoggedInApp /> : <LoggedOutApp />}
       {isDev && <TanStackRouterDevtools />}
     </div>

@@ -11,6 +11,7 @@ import { authenticatedRoute } from './routes/_authenticated'
 import { privacyRoute } from './routes/info-pages/privacy'
 import { aboutRoute } from './routes/info-pages/about'
 import { contactRoute } from './routes/info-pages/contact'
+import { helpRoute } from './routes/help'
 
 const routeTree = rootRoute.addChildren([
     authRoute,
@@ -21,6 +22,7 @@ const routeTree = rootRoute.addChildren([
 
     authenticatedRoute.addChildren([
         dashboardRoute,
+        helpRoute,
         homeRoute,
         detailsRoute,
         settingsRoute,
